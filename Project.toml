@@ -1,0 +1,13 @@
+name = "StabilizerFormalism"
+uuid = "7e638fc7-ba1b-4f85-bfb5-35bfeb24dd6c"
+authors = ["sho <shobhan126@gmail.com"]
+version = "0.1.0"
+
+[compat]
+julia = "1.6.6"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
