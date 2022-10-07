@@ -1,0 +1,3 @@
+var documenterSearchIndex = {"docs":
+[{"location":"#StabilizerFormalism.jl-Docs","page":"StabilizerFormalism.jl Docs","title":"StabilizerFormalism.jl Docs","text":"","category":"section"},{"location":"","page":"StabilizerFormalism.jl Docs","title":"StabilizerFormalism.jl Docs","text":"CurrentModule = StabilizerFormalism\n","category":"page"},{"location":"","page":"StabilizerFormalism.jl Docs","title":"StabilizerFormalism.jl Docs","text":"@pauli XXIX","category":"page"},{"location":"#StabilizerFormalism.@pauli-Tuple{Any}","page":"StabilizerFormalism.jl Docs","title":"StabilizerFormalism.@pauli","text":"Convenience macro for constructing a Pauli Operator. @pauli XYZXII\n\n\n\n\n\n","category":"macro"}]
+}
