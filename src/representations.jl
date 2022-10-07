@@ -1,7 +1,16 @@
 import Base.Matrix
 
 """
-Creates the symplectic boolean representation of the PauliOperator
+    symplectic(s::Pauli)
+Creates the symplectic 2N boolean representation of the PauliOperator. [X...|Z...]
+`X...` bitvector is 1 if X operator at that site, 0 if Z operator at the site
+
+# Examples
+```julia-repl
+julia> symplectic(p"IXY")
+[0 1 1 0 0 1]
+julia> length(symplectic(p"IXYZ))
+6
 """
 function symplectic(s::Pauli)
     v = vec(s)
@@ -12,8 +21,17 @@ function symplectic(s::Pauli)
     BitVector(r)
 end
 
-checkmatrix(s::Vector{<:Pauli}) = vcat(symplectic.(s)'...)
+"""
+Given a vector of Pauli Operators with same number of qubits, return a matrix rows corresponding to the 
+symplectic representation of each Pauli{N}.
+"""
+checkmatrix(s::Vector{<:Pauli{N}}) where N = vcat(symplectic.(s)'...)
 
+"""
+    Matrix(x::PauliPrimitive)
+
+Returns matrix representation of the 1 qubit PauliPrimitive
+"""
 function Matrix(x::PauliPrimitive)
     v = (
         [1 0; 0 1],
@@ -24,4 +42,9 @@ function Matrix(x::PauliPrimitive)
     v[Integer(x) + 1]
 end
 
+"""
+    Matrix(x::PauliPrimitive)
+
+Returns a tensor product matrix of the Pauli{N} operator.
+"""
 Matrix(x::Pauli) = x.coeff * kron(Matrix.(x.val)...)

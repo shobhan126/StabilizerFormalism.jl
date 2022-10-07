@@ -1,6 +1,6 @@
 module StabilizerFormalism
 
-    export Pauli, PauliTable, @p_str
+    export Pauli, PauliTable, @p_str, @pauli
     export symplectic, checkmatrix
 
     include("pauli.jl")

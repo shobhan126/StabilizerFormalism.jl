@@ -4,12 +4,14 @@ authors = ["sho <shobhan126@gmail.com"]
 version = "0.1.0"
 
 [deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
 [compat]
 julia = "1.6.6"
 
 [extras]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
