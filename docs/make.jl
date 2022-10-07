@@ -1,3 +1,3 @@
 using Documenter, StabilizerFormalism
 
-makedocs(sitename="Stabilizer Formalism")
+makedocs(root='../', sitename="Stabilizer Formalism")
