@@ -87,13 +87,13 @@ function *(p::Pauli{N}, q::Pauli{N}) where N
 end
 
 #### Negative sign -Pauli(1, [...]) = Pauli(-1, [...])
--(x::Pauli) = Pauli(-x.coeff, vec(x))
+Base.:-(x::Pauli) = Pauli(-x.coeff, x.val) 
 
 """
     abs(p::Pauli)
 Return a new Pauli with the coefficient of `p` set to 1
 """
-abs(p::Pauli) = Pauli(abs(p.coeff), vec(x))
+abs(p::Pauli) = Pauli(abs(p.coeff), p.val)
 
 ==(x::Pauli, y::Pauli) = isequal(x.coeff, y.coeff) & isequal(vec(x), vec(y))
     
