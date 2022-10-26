@@ -8,7 +8,7 @@
     1 -1 0
 ] * im
 
-ϵ(i::Int,j::Int) = (0 in [i, j]) | (i==j) ? 1 : ε[i,j]
+# ϵ(i::Int,j::Int) = (0 in [i, j]) | (i==j) ? 1 : ε[i,j]
 
 global const paulibit = Dict(
     (false, false) => 0,

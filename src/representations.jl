@@ -12,39 +12,32 @@ julia> symplectic(p"IXY")
 julia> length(symplectic(p"IXYZ))
 6
 """
-function symplectic(s::Pauli)
-    v = vec(s)
-    r = [
-        [e in [σx, σy] ? 1 : 0 for e in v]...,
-        [e in [σz, σy] ? 1 : 0 for e in v]...
-    ]
-    BitVector(r)
-end
+symplectic(p::Pauli) = vec(p.bits)
 
 """
 Given a vector of Pauli Operators with same number of qubits, return a matrix rows corresponding to the 
 symplectic representation of each Pauli{N}.
 """
-checkmatrix(s::Vector{<:Pauli{N}}) where N = vcat(symplectic.(s)'...)
+checkmatrix(s::Vector{<:Pauli}) = vcat(symplectic.(s)'...)
 
 """
     Matrix(x::PauliPrimitive)
 
 Returns matrix representation of the 1 qubit PauliPrimitive
 """
-function Matrix(x::PauliPrimitive)
-    v = (
-        [1 0; 0 1],
-        [0 1; 1 0],
-        im*[0 -1; 1 0],
-        [1 0; -1 0],
-    )
-    v[Integer(x) + 1]
-end
+# function Matrix(x::PauliPrimitive)
+#     v = (
+#         [1 0; 0 1],
+#         [0 1; 1 0],
+#         im*[0 -1; 1 0],
+#         [1 0; -1 0],
+#     )
+#     v[Integer(x) + 1]
+# end
 
 """
     Matrix(x::PauliPrimitive)
 
 Returns a tensor product matrix of the Pauli{N} operator.
 """
-Matrix(x::Pauli) = x.coeff * kron(Matrix.(x.val)...)
+# Matrix(x::Pauli) = x.coeff * kron(Matrix.(x.val)...)
