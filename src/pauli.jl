@@ -42,7 +42,7 @@ function Base.show(io::IO, p::Pauli)
     prefix *= p.imagbit ? "im" : ""
     print(io, prefix)
     s = ["I", "X", "Z",  "Y"]
-    foreach(x-> print(s[x+1]), xbits(p) + 2*zbits(p))    
+    foreach(x-> print(io, s[x+1]), xbits(p) + 2*zbits(p))    
 end
 
 function Base.:*(p::Pauli, q::Pauli)
