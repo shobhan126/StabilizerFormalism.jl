@@ -84,6 +84,7 @@ Product between two Pauli Operators
 function *(p::Pauli{N}, q::Pauli{N}) where N
     r = p.val .* q.val
     coeff = prod(getfield.(r, :coeff)) * p.coeff * q.coeff
+    coeff = isreal(coeff) ? real(coeff) : coeff
     Pauli(coeff, first.(getfield.(r, :val)))
 end
 
