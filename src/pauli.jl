@@ -83,7 +83,8 @@ Product between two Pauli Operators
 """
 function *(p::Pauli{N}, q::Pauli{N}) where N
     r = p.val .* q.val
-    Pauli(prod(getfield.(r, :coeff)), first.(getfield.(r, :val)))
+    coeff = prod(getfield.(r, :coeff)) * p.coeff * q.coeff
+    Pauli(coeff, first.(getfield.(r, :val)))
 end
 
 #### Negative sign -Pauli(1, [...]) = Pauli(-1, [...])
