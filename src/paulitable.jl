@@ -22,6 +22,6 @@ global const paulibit = Dict(
 k(i,j) = (i == j) ? 0 : 0 in [i,j] ? max(i,j) : abs(i-j) + (max(i,j) % 3)
 
 # Constructing Group Table
-global const PauliTable = Dict(
-    [(PauliPrimitive(i), PauliPrimitive(j)) => (ϵ(i,j), PauliPrimitive(k(i,j))) for (i,j) in product(0:3, 0:3)]
-)
+# global const PauliTable = Dict(
+#     [(PauliPrimitive(i), PauliPrimitive(j)) => (ϵ(i,j), PauliPrimitive(k(i,j))) for (i,j) in product(0:3, 0:3)]
+# )
