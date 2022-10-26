@@ -1,6 +1,7 @@
 # Pauli Primitive Enum
 import Base: show, *, -, ==, abs, vec
 import Base.Iterators.product
+using SparseArrays
 
 include("paulitable.jl")
 
@@ -19,6 +20,48 @@ struct Pauli{N}
     coeff::Number
     val::NTuple{N, PauliPrimitive}
 end
+
+
+# writing a pauli with bits already
+struct Pauli2
+    signbit::Bool
+    imagbit::Bool
+    bits::BitMatrix
+end
+
+isneg(p::Pauli2) = p.signbit
+
+function Pauli2(x::AbstractVector,z::AbstractVector, neg=false, imag=false)
+    Pauli2(neg, imag, SparseMatrixCSC(BitMatrix(hcat(x,z))))
+end
+
+Pauli2(x::AbstractVector, neg=false, imag=false) = Pauli2(x[1:Int(length(x)/2)], x[Int(length(x)/2)+1:end], neg, imag)
+bits(p::Pauli2) = p.bits
+# col1 = xbits, # col2 = ybits
+xbits(p::Pauli2) = p.bits[:,1]
+zbits(p::Pauli2) = p.bits[:,2]
+symplectic(p::Pauli2) = vec(p.bits)
+Base.adjoint(p::Pauli2) = p.imagbit ? p.signbit ⊻ true : p
+
+
+# REPL representation for the Pauli Operator
+function Base.show(io::IO, p::Pauli2)
+    prefix = p.signbit ? "-" : ""
+    prefix *= p.imagbit ? "im" : ""
+    print(io, prefix)
+    s = ["I", "X", "Z",  "Y"]
+    foreach(x-> print(s[x+1]), xbits(p) + 2*zbits(p))    
+end
+
+# gets the ith column
+Base.getindex(p::Pauli2, i::Integer) = p.bits[i, :]
+
+function Base.:*(p::Pauli2, q::Pauli2)
+    newbits = bits(p) .⊻ bits(q)
+    coeff = (im)^(p.imagbit+q.imagbit) * prod([ϵ(i,j) for (i, j) in zip(eachrow(p.bits), eachrow(q.bits))])
+    Pauli2((coeff.re + coeff.im < 0) ⊻ p.signbit ⊻ q.signbit, ~isreal(coeff), newbits)
+end
+
 
 """
     Pauli(s::Symbol)
@@ -124,6 +167,18 @@ macro p_str(p)
     return Pauli(ops...)
 end
 
+
+macro st_str(p)
+    conv = Dict(
+        'x' => [1, 0],
+        'y' => [1, 1],
+        'z' => [0, 1],
+        'i' => [0, 0]
+    )
+    m = SparseMatrixCSC(hcat([conv[lowercase(v)] for v in p]...)')
+    return Pauli2(false, false, m)
+end
+
 """
    @pauli XYZXII...
 
@@ -132,6 +187,12 @@ Convenience macro for constructing a Pauli{N} type.
 macro pauli(ex)
     s = string(ex)
     :(@p_str $s)
+end
+
+
+macro stab(ex)
+    s = string(ex)
+    :(@st_str $s)
 end
 
 
