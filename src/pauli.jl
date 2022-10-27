@@ -98,10 +98,10 @@ Macro to instantiate a Pauli{N} type from a string
 """
 macro p_str(p)
     conv = Dict(
-        'x' => [1, 0],
-        'y' => [1, 1],
-        'z' => [0, 1],
-        'i' => [0, 0]
+        'x' => [true, false],
+        'y' => [true, true],
+        'z' => [false, true],
+        'i' => [false, false]
     )
     m = SparseMatrixCSC(hcat([conv[lowercase(v)] for v in p]...)')
     return Pauli(false, false, m)
