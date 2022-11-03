@@ -4,13 +4,12 @@ abstract type Gate end
 abstract type Unitary <: Gate end
 abstract type Clifford <: Unitary end
 
-
 macro cliffordgenerators(args...)
     for arg in args
         expr = quote 
                 struct ($arg) <: Clifford
                 qubits::NTuple{N, Int} where N
-                ($arg)(qubits...)  = new(qubits)
+                ($arg)(qubits...) = new(qubits)
                 end
         end
         eval(expr)
@@ -39,7 +38,7 @@ end
 function →(x::Pauli, y::S)
     z = Pauli(x.signbit, x.imagbit, deepcopy(x.bits))
     for i in y.qubits
-        # X => Y;  Y => X # bitflip on Z
+        # X => Y;  Y => X bitflip on Z
         z.bits[i,2] ⊻= z.bits[i,1]
         dropzeros!(z.bits[i,:])
     end
@@ -91,8 +90,14 @@ function →(x::Pauli, y::CNOT)
     z
 end
 
+# Which one is better?  Composed Function or using Vector?
 →(x::Clifford, y::Clifford) = x ∘ y
 →(x::Clifford, y::ComposedFunction{<:Clifford}) = x ∘ y
 →(x::Pauli, y::ComposedFunction{<:Clifford}) = (x → y.outer) → y.inner
 →(f, g, h...) = →(→(f, g), h...)
 
+# →(g::Clifford, h::Clifford) = [g, h]
+# →(g::Clifford, h::Vector{<:Clifford}) = [g, h...]
+# →(g::Vector{<:Clifford}, h::Clifford) = [g..., h]
+# →(f::Pauli, g, h...) = →(→(f,g), h...)
+# →(g::Pauli, h::Vector{<:Clifford}) = →(g,h...)
