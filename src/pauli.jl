@@ -117,7 +117,7 @@ macro pauli(ex)
     :(@p_str $s)
 end
 
-# todo: is it better to have a an empty struct or just pass around types
+# todo: is it better to have a an empty struct or just pass around types?
 # abstract type PauliPrimitive end
 # for x in "IXYZ"
 #     s = Symbol("Pauli$(x)")
@@ -128,3 +128,21 @@ end
 # end
 # Also, might help if the internals is binary? 
 
+⊗ = kron
+function Base.kron(p1::Pauli, p2::Pauli) 
+    Pauli(
+        (p1.signbit ⊻ p2.signbit ⊻ (p1.imagbit & p2.imagbit)),
+        (p1.imagbit ⊻ p2.imagbit), 
+        vcat(p1.bits, p2.bits)
+    )
+end
+
+
+commuting(x::Pauli, y::Pauli) = (x * y).imagbit == (x.imagbit ⊻ y.imagbit)
+anticommuting(x::Pauli, y::Pauli) = ~commuting(x,y)
+commuting(x::AbstractVector{<:Pauli}, y::AbstractVector{<:Pauli}) = [commuting.(i,y) for i in x]
+anticommuting(x::AbstractVector{<:Pauli}, y::AbstractVector{<:Pauli}) = [anticommuting.(i,y) for i in x]
+
+Base.length(x::Pauli) = 1
+Base.iterate(x::Pauli) = (x, nothing)
+Base.iterate(x::Pauli, n::Nothing) = nothing
