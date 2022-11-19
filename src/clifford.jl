@@ -101,3 +101,4 @@ end
 # →(g::Vector{<:Clifford}, h::Clifford) = [g..., h]
 # →(f::Pauli, g, h...) = →(→(f,g), h...)
 # →(g::Pauli, h::Vector{<:Clifford}) = →(g,h...)
+ 
