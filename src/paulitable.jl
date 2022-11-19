@@ -1,4 +1,3 @@
-
 @enum PauliPrimitive σi=0 σx=1 σy=2 σz=3
 # helpers to create group table
 # anti-syemmtric tensor
