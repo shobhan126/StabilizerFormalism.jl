@@ -16,4 +16,4 @@ global const paulibits = Dict(
 Levi Civita AntiSymmetric Function 
     $(FUNCTIONNAME)(i,j)
 """
-ϵ(i::AbstractArray, j::AbstractArray) =  iszero(i) | iszero(j) | (i==j) ? 1 : ε[paulibits[i...], paulibits[j...]]
+levicivita(i::AbstractArray, j::AbstractArray) =  iszero(i) | iszero(j) | (i==j) ? 1 : ε[paulibits[i...], paulibits[j...]]

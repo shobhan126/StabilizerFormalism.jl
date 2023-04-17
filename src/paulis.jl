@@ -112,7 +112,7 @@ module Paulis
 
     function Base.:*(p::Pauli, q::Pauli)
         newbits = bits(p) .⊻ bits(q)
-        coeff = (im)^(p.imagbit+q.imagbit) * prod([ϵ(i,j) for (i, j) in zip(eachrow(p.bits), eachrow(q.bits))])
+        coeff = (im)^(p.imagbit+q.imagbit) * prod([levicivita(i,j) for (i, j) in zip(eachrow(p.bits), eachrow(q.bits))])
         Pauli((coeff.re + coeff.im < 0) ⊻ p.signbit ⊻ q.signbit, ~isreal(coeff), newbits)
     end
 
