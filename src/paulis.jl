@@ -185,7 +185,7 @@ Take a adjoint of the pauli operator `iXYZ...`  => `-iXYZ...`.
 
     $(FUNCTIONNAME)(p::Pauli)
 """
-Base.adjoint(p::Pauli) = p.imagbit ? Pauli(p.signbit ⊻ true, p.imagbit) : p
+Base.adjoint(p::Pauli) = Pauli(p.xbits, p.zbits, p.signbit ⊻ (p.imagbit & true), p.imagbit)
 
 
 
@@ -193,7 +193,7 @@ Base.adjoint(p::Pauli) = p.imagbit ? Pauli(p.signbit ⊻ true, p.imagbit) : p
 *(y::AbstractPauli, x::Number) = Pauli((x < 0) ⊻ y.signbit, y.imagbit, y.bits)
 *(y::AbstractPauli, x::Complex) = isequal(x, im) ?
                           Pauli(y.xbits, y.zbits, y.signbit ⊻ y.imagbit, ~y.imagbit,) : isequal(x, -im) ?
-                          Pauli(y.zbits, y.zbits, ~y.signbit ⊻ y.imagbit, ~y.imagbit) : throw(MethodError)
+                          Pauli(y.xbits, y.zbits, ~y.signbit ⊻ y.imagbit, ~y.imagbit) : throw(MethodError)
 *(x::Number, y::Pauli) = *(y, x)
 
 

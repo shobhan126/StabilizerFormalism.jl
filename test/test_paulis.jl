@@ -13,9 +13,8 @@ using StabilizerFormalism.Paulis
 end
 
 x,y,z = Pauli.([:x,:y,:z])
-@testset "Scalar Operations" begin
-    
 
+@testset "Multiplicative Operations" begin
     # scalar multiplication
     imX = (im * x)
     im2X = im * imX
@@ -29,12 +28,13 @@ x,y,z = Pauli.([:x,:y,:z])
 
 end
 
-@testset "Tensor Operation"
+@testset "Tensor Operation" begin
     # test tensor product
     @test x ⊗ x == Pauli(:xx)
     @test im*Pauli(:x) ⊗ Pauli(:y) == im * Pauli(:xy)
+end
 
+@testset "Adjoint Operation" begin
     # check adjoint 
     @test (im * x)' == -im * x
-    
 end
