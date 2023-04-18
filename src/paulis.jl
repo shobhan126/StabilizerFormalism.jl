@@ -228,9 +228,10 @@ Alias for kronecker product
 const ⊗ = kron
 function Base.kron(p1::Pauli, p2::Pauli)
     Pauli(
+        vcat(xbits(p1), xbits(p2)),
+        vcat(zbits(p1), zbits(p2)),
         (p1.signbit ⊻ p2.signbit ⊻ (p1.imagbit & p2.imagbit)),
-        (p1.imagbit ⊻ p2.imagbit),
-        vcat(p1.bits, p2.bits)
+        (p1.imagbit ⊻ p2.imagbit)
     )
 end
 
@@ -253,6 +254,4 @@ Base.iterate(x::Pauli) = (x, nothing)
 Base.iterate(x::Pauli, n::Nothing) = nothing
 
 include("representations.jl")
-
-
 end

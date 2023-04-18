@@ -5,9 +5,9 @@ module StabilizerFormalism
     include("paulis.jl")
     using .Paulis
     export AbstractPauli
-    export Pauli, PauliTable, @p_str, @pauli
+    export Pauli, PauliTable, @p_str, @pauli, xbits, zbits
     export symplectic, checkmatrix
-    
+    include("stabilizer_group.jl")
     include("cliffords.jl")
     using .Cliffords: ⋊, Clifford
     export Cliffords

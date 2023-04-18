@@ -138,15 +138,15 @@ Passing Multiple arguments interpretted as C-ⁿZ.
 """
 (g::CZ!)(p::AbstractPauli) = CNOT!(g.qubits...) |> H!(g.qubits[2:end]...)
 
-
+Base.copy(p::Pauli{N}) where N = Pauli{N}(p.signbit, p.imagbit, copy(p.xbits), copy(p.zbits))
 # todo macro?
-(g::H)(p::AbstractPauli) = (g!)(copy(p))
-(g::S)(p::AbstractPauli) = (g!)(copy(p))
-(g::X)(p::AbstractPauli) = (g!)(copy(p))
-(g::Y)(p::AbstractPauli) = (g!)(copy(p))
-(g::Z)(p::AbstractPauli) = (g!)(copy(p))
-(g::CNOT)(p::AbstractPauli) = (g!)(copy(p))
-(g::CZ)(p::AbstractPauli) = (g!)(copy(p))
+(g::H)(p::AbstractPauli) = H!(g.qubits...)(copy(p))
+(g::S)(p::AbstractPauli) = S!(g.qubits...)(copy(p))
+(g::X)(p::AbstractPauli) = X!(g.qubits...)(copy(p))
+(g::Y)(p::AbstractPauli) = Y!(g.qubits...)(copy(p))
+(g::Z)(p::AbstractPauli) = Z!(g.qubits...)(copy(p))
+(g::CNOT)(p::AbstractPauli) = CNOT!(g.qubits...)(copy(p))
+(g::CZ)(p::AbstractPauli) = CZ!(g.qubits...)(copy(p))
 
 
 
@@ -160,7 +160,6 @@ function ⋊(p::Pauli, op::H)
     q = Pauli(signbit, p.imagbit, bits(p))
     # flip the particular qubits
     q.bits[op.qubits, :] = q.bits[op.qubits, [2, 1]]
-    dropzeros!(q.bits)
     q
 end
 
@@ -169,7 +168,6 @@ function ⋊(x::Pauli, y::S)
     for i in y.qubits
         # X => Y;  Y => X bitflip on Z
         z.bits[i, 2] ⊻= z.bits[i, 1]
-        dropzeros!(z.bits[i, :])
     end
     z
 end
@@ -182,7 +180,6 @@ function ⋊(x::Pauli, y::X)
     for i in y.qubits
         # Z -> -Z # flips the sign if z bit is present
         z.signbit ⊻= x.bits[i, 2]
-        dropzeros!(z.bits[i, :])
     end
     z
 end
@@ -193,7 +190,6 @@ function ⋊(x::Pauli, y::Y)
     for i in y.qubits
         # X-> - X# flips the sign if x bit is present
         z.signbit ⊻= (x.bits[i, 1] ⊻ x.bits[i, 2])
-        dropzeros!(z.bits[i, :])
     end
     z
 end
@@ -203,7 +199,6 @@ function ⋊(x::Pauli, y::Z)
     for i in [y.qubits...]
         # X -> -X # flips the sign if z bit is present
         z.signbit ⊻= x.bits[i, 1]
-        dropzeros!(z.bits[i, :])
     end
     z
 end
@@ -216,9 +211,7 @@ function ⋊(x::Pauli, y::CNOT)
         # X1 -> X1X2; Z2 => Z1Z2
         z.bits[i, 1] ⊻= x.bits[control, 1]
         z.bits[control, 2] ⊻= x.bits[i, 2]
-        dropzeros!(z.bits[i, :])
     end
-    dropzeros!(z.bits[control, :])
     z
 end
 
@@ -227,11 +220,10 @@ end
 ⋊(x::Clifford, y::ComposedFunction{<:Clifford}) = x ∘ y
 ⋊(x::Pauli, y::ComposedFunction{<:Clifford}) = (x ⋊ y.outer) ⋊ y.inner
 ⋊(f, g, h...) = ⋊(⋊(f, g), h...)
-
-end
 # ⋊(g::Clifford, h::Clifford) = [g, h]
 # ⋊(g::Clifford, h::Vector{<:Clifford}) = [g, h...]
 # ⋊(g::Vector{<:Clifford}, h::Clifford) = [g..., h]
 # ⋊(f::Pauli, g, h...) = ⋊(⋊(f,g), h...)
-
 # ⋊(g::Pauli, h::Vector{<:Clifford}) = ⋊(g,h...)
+
+end
