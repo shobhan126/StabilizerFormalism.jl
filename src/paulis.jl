@@ -10,6 +10,10 @@ import Base.Iterators.product
 using DocStringExtensions
 import LinearAlgebra: mul!, lmul!, rmul!, kron
 using LoopVectorization: @inbounds
+export AbstractPauli, Pauli, @p_str, @pauli
+export bits, xbits, zbits, symplectic, checkmatrix
+export ⊗, commuting, anticommuting
+
 
 include("paulitable.jl")
 
@@ -230,18 +234,18 @@ function Base.kron(p1::Pauli, p2::Pauli)
     )
 end
 
-"""
-Return true if two paulis commute
-    $(FUNCTIONNAME)(x,y)
+# """
+# Return true if two paulis commute
+#     $(FUNCTIONNAME)(x,y)
 
-"""
-commuting(x::AbstractPauli, y::AbstractPauli) = imagbit(x * y) & (imagbit(x) ⊻ imagbit(y))
+# """
+# commuting(x::AbstractPauli, y::AbstractPauli) = imagbit(x * y) & (imagbit(x) ⊻ imagbit(y))
 
-"""
-Return true if two paulis anticommute
-    $(FUNCTIONNAME)(x,y)
-"""
-anticommuting(x::AbstractPauli, y::AbstractPauli) = ~commuting(x, y)
+# """
+# Return true if two paulis anticommute
+#     $(FUNCTIONNAME)(x,y)
+# """
+# anticommuting(x::AbstractPauli, y::AbstractPauli) = ~commuting(x, y)
 
 # setting up iteration interface
 Base.length(x::Pauli) = 1
@@ -250,7 +254,5 @@ Base.iterate(x::Pauli, n::Nothing) = nothing
 
 include("representations.jl")
 
-export Pauli, @p_str, @pauli
-export bits, xbits, zbits, symplectic, checkmatrix
-export ⊗, commuting, anticommuting
+
 end

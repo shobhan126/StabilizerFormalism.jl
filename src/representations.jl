@@ -12,7 +12,7 @@ julia> symplectic(p"IXY")
 julia> length(symplectic(p"IXYZ))
 6
 """
-symplectic(p::AbstractPauli) = [xbits(p); zbits]
+symplectic(p::AbstractPauli) = [xbits(p); zbits(p)]
 
 """
 Given a vector of Pauli Operators with same number of qubits, return a matrix rows corresponding to the 
