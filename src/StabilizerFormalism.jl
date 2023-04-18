@@ -9,6 +9,7 @@ module StabilizerFormalism
     export symplectic, checkmatrix
     include("stabilizer_group.jl")
     include("cliffords.jl")
+    include("graph_state.jl")
     using .Cliffords: ⋊, Clifford
     export Cliffords
     

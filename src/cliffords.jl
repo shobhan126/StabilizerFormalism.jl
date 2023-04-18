@@ -1,7 +1,7 @@
 module Cliffords
 using DocStringExtensions
 using ..StabilizerFormalism
-export Clifford, ⋊, CNOT, H, S, X, Y, Z, H!, S!, Y!, Z!
+export Clifford, ⋊, CZ, CNOT, H, S, X, Y, Z, CZ!, CNOT!, H!, S!, Y!, Z!
 using ..StabilizerFormalism.Paulis: bits, zbits, xbits, Pauli
 # I don't think i need this kind of subtyping at the moment? 
 abstract type Gate <: Function end
@@ -136,7 +136,7 @@ In-place CZ gate conjugation.
 The first qubit is the control qubit, subsequent qubits are target qubits.
 Passing Multiple arguments interpretted as C-ⁿZ.
 """
-(g::CZ!)(p::AbstractPauli) = CNOT!(g.qubits...) |> H!(g.qubits[2:end]...)
+(g::CZ!)(p::AbstractPauli) = p |> CNOT!(g.qubits...) |> H!(g.qubits[2:end]...)
 
 # todo macro?
 (g::H)(p::AbstractPauli) = H!(g.qubits...)(copy(p))

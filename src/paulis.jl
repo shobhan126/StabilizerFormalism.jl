@@ -190,8 +190,8 @@ Base.adjoint(p::Pauli) = Pauli(p.xbits, p.zbits, p.signbit ⊻ (p.imagbit & true
 
 
 # Scalar Multiplication
-*(y::AbstractPauli, x::Number) = Pauli((x < 0) ⊻ y.signbit, y.imagbit, y.bits)
-*(y::AbstractPauli, x::Complex) = isequal(x, im) ?
+*(y::Pauli, x::Number) = Pauli((x < 0) ⊻ y.signbit, y.imagbit, y.bits)
+*(y::Pauli, x::Complex) = isequal(x, im) ?
                           Pauli(y.xbits, y.zbits, y.signbit ⊻ y.imagbit, ~y.imagbit,) : isequal(x, -im) ?
                           Pauli(y.xbits, y.zbits, ~y.signbit ⊻ y.imagbit, ~y.imagbit) : throw(MethodError)
 *(x::Number, y::Pauli) = *(y, x)
