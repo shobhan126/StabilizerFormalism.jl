@@ -1,26 +1,23 @@
-@enum PauliPrimitive σi=0 σx=1 σy=2 σz=3
-# helpers to create group table
-# anti-syemmtric tensor
-ε = [
-    0 1 -1;
-    -1 0 1;
-    1 -1 0
-] * im
-
-# ϵ(i::Int,j::Int) = (0 in [i, j]) | (i==j) ? 1 : ε[i,j]
-
-global const paulibits = Dict(
-    (false, false) => 0,
-    (true, false) => 1,
-    (true, true) => 2,
-    (false, true) => 3,
+const global paulibits = Dict(
+    (false, false) => 1,
+    (true, false) => 2,
+    (true, true) => 3,
+    (false, true) => 4,
 )
 
-ϵ(i::AbstractArray, j::AbstractArray) =  iszero(i) | iszero(j) | (i==j) ? 1 : ε[paulibits[i...], paulibits[j...]]
+const global psm = Bool[
+    0 0 0 0
+    0 0 0 1
+    0 1 0 0
+    0 0 1 0
+]
 
-k(i,j) = (i == j) ? 0 : 0 in [i,j] ? max(i,j) : abs(i-j) + (max(i,j) % 3)
+const global pim = Bool[
+    0 0 0 0
+    0 0 1 1
+    0 1 0 1
+    0 1 1 0
+]
 
-# Constructing Group Table
-# global const PauliTable = Dict(
-#     [(PauliPrimitive(i), PauliPrimitive(j)) => (ϵ(i,j), PauliPrimitive(k(i,j))) for (i,j) in product(0:3, 0:3)]
-# )
+signlogic(i, j, k, l) = @inbounds psm[paulibits[i, j], paulibits[k, l]]
+imaglogic(i, j, k, l) = @inbounds pim[paulibits[i, j], paulibits[k, l]]

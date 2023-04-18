@@ -12,32 +12,39 @@ julia> symplectic(p"IXY")
 julia> length(symplectic(p"IXYZ))
 6
 """
-symplectic(p::Pauli) = vec(p.bits)
+symplectic(p::AbstractPauli) = [xbits(p); zbits(p)]
 
 """
 Given a vector of Pauli Operators with same number of qubits, return a matrix rows corresponding to the 
 symplectic representation of each Pauli{N}.
 """
-checkmatrix(s::Vector{<:Pauli}) = vcat(symplectic.(s)'...)
+checkmatrix(s::Vector{<:AbstractPauli{N}}) where N= vcat(symplectic.(s)'...)
 
 """
-    Matrix(x::PauliPrimitive)
+    Matrix(x::Pauli)
 
 Returns matrix representation of the 1 qubit PauliPrimitive
 """
-# function Matrix(x::PauliPrimitive)
-#     v = (
-#         [1 0; 0 1],
-#         [0 1; 1 0],
-#         im*[0 -1; 1 0],
-#         [1 0; -1 0],
-#     )
-#     v[Integer(x) + 1]
-# end
+function Matrix(p::Pauli, sparse=true)
+    # using a tuple has less allocations than using a vector!
 
-"""
-    Matrix(x::PauliPrimitive)
-
-Returns a tensor product matrix of the Pauli{N} operator.
-"""
-# Matrix(x::Pauli) = x.coeff * kron(Matrix.(x.val)...)
+    # c  sign * im 
+    c = (-1^p.signbit  * 1im^p.imagbit)
+    if sparse
+        f = b -> (
+            SparseMatrixCSC([1 0; 0 1]), 
+            SparseMatrixCSC([0 1; 1 0]),
+            SparseMatrixCSC([0 -im; im 0]), 
+            SparseMatrixCSC([1 0; 0 -1])
+        )[sum(b)+1] * c
+    else
+        f = b -> (
+            [1 0; 0 1], 
+            [0 1; 1 0],
+            [0 -im; im 0], 
+            [1 0; 0 -1]
+        )[sum(b)+1] * c
+    end
+    mapreduce(f, kron, eachrow(bits(p))) * c
+        
+end

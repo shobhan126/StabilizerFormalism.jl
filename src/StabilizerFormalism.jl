@@ -1,9 +1,18 @@
 module StabilizerFormalism
-
-    export Pauli, PauliTable, @p_str, @pauli
+    # should I load SparseArrays alongside this?
+    # using SparseArrays 
+    using DocStringExtensions
+    include("paulis.jl")
+    using .Paulis
+    export AbstractPauli
+    export Pauli, PauliTable, @p_str, @pauli, xbits, zbits
     export symplectic, checkmatrix
-
-    include("pauli.jl")
-    include("representations.jl")
-
+    include("stabilizer_group.jl")
+    include("cliffords.jl")
+    include("graph_state.jl")
+    using .Cliffords: ⋊, Clifford
+    export Cliffords
+    
+    # Maybe not pollute the namespace with clifford names
+    # export  CNOT, H, S, X, Y, Z
 end
