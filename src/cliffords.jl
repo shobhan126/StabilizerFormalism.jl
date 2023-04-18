@@ -149,10 +149,15 @@ Base.copy(p::Pauli{N}) where N = Pauli{N}(p.signbit, p.imagbit, copy(p.xbits), c
 (g::CZ)(p::AbstractPauli) = CZ!(g.qubits...)(copy(p))
 
 
+#= 
+1Q Gates Remaining: H_XY, H_YZ, √X, √X†, √Y, √Y†
+2Q Gates Remaining: CY, XCX, XCY, XCZ, YCX, YCY, YCZ, SWAP, ISWAP, ISWAP_DAG
+
+=# 
 
 
 ### Legacy #### 
-
+# TODO: Deprecate & Remove this insanity
 
 # Hadamard flips the Z->X,X->Z, Y-> -Y
 function ⋊(p::Pauli, op::H)

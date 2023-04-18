@@ -235,6 +235,8 @@ function Base.kron(p1::Pauli, p2::Pauli)
     )
 end
 
+Base.copy(p::Pauli{N}) where N = Pauli{N}(p.signbit, p.imagbit, copy(p.xbits), copy(p.zbits))
+
 # """
 # Return true if two paulis commute
 #     $(FUNCTIONNAME)(x,y)
