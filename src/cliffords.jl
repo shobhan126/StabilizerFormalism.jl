@@ -138,7 +138,6 @@ Passing Multiple arguments interpretted as C-ⁿZ.
 """
 (g::CZ!)(p::AbstractPauli) = CNOT!(g.qubits...) |> H!(g.qubits[2:end]...)
 
-Base.copy(p::Pauli{N}) where N = Pauli{N}(p.signbit, p.imagbit, copy(p.xbits), copy(p.zbits))
 # todo macro?
 (g::H)(p::AbstractPauli) = H!(g.qubits...)(copy(p))
 (g::S)(p::AbstractPauli) = S!(g.qubits...)(copy(p))
