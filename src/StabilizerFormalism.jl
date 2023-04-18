@@ -2,7 +2,6 @@ module StabilizerFormalism
     # should I load SparseArrays alongside this?
     # using SparseArrays 
     using DocStringExtensions
-    
     include("paulis.jl")
     using .Paulis
     export AbstractPauli

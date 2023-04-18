@@ -1,5 +1,5 @@
 module Cliffords
-
+using DocStringExtensions
 using ..StabilizerFormalism
 export Clifford, ⋊, CNOT, H, S, X, Y, Z, H!, S!, Y!, Z!
 using ..StabilizerFormalism.Paulis: bits, zbits, xbits, Pauli
@@ -139,7 +139,7 @@ Passing Multiple arguments interpretted as C-ⁿZ.
 (g::CZ!)(p::AbstractPauli) = CNOT!(g.qubits...) |> H!(g.qubits[2:end]...)
 
 
-
+# todo macro?
 (g::H)(p::AbstractPauli) = (g!)(copy(p))
 (g::S)(p::AbstractPauli) = (g!)(copy(p))
 (g::X)(p::AbstractPauli) = (g!)(copy(p))

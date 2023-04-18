@@ -190,21 +190,21 @@ Base.adjoint(p::Pauli) = p.imagbit ? Pauli(p.signbit ⊻ true, p.imagbit) : p
 
 
 # Scalar Multiplication
-*(y::Pauli, x::Number) = Pauli((x < 0) ⊻ y.signbit, y.imagbit, y.bits)
-*(y::Pauli, x::Complex) = isequal(x, im) ?
-                          Pauli(y.signbit ⊻ y.imagbit, ~y.imagbit, y.bits) : isequal(x, -im) ?
-                          Pauli(~y.signbit ⊻ y.imagbit, ~y.imagbit, y.bits) : throw(MethodError)
+*(y::AbstractPauli, x::Number) = Pauli((x < 0) ⊻ y.signbit, y.imagbit, y.bits)
+*(y::AbstractPauli, x::Complex) = isequal(x, im) ?
+                          Pauli(y.xbits, y.zbits, y.signbit ⊻ y.imagbit, ~y.imagbit,) : isequal(x, -im) ?
+                          Pauli(y.zbits, y.zbits, ~y.signbit ⊻ y.imagbit, ~y.imagbit) : throw(MethodError)
 *(x::Number, y::Pauli) = *(y, x)
 
 
 #### Negative sign -Pauli(1, [...]) = Pauli(-1, [...])
-Base.:-(x::Pauli) = Pauli(x.signbit ⊻ true, x.imagbit, x.bits)
+Base.:-(x::Pauli) = Pauli(x.xbits, x.zbits, x.signbit ⊻ true, x.imagbit)
 
 """
 Return a new Pauli with the coefficient of `p` set to 1
     abs(p::Pauli)
 """
-abs(p::Pauli) = Pauli(false, false, p.bits)
+abs(p::Pauli) = Pauli(p.xbits, p.zbits, false, false)
 
 ==(x::Pauli, y::Pauli) = (x.signbit == y.signbit) & isequal(bits(x), bits(y)) & (x.imagbit == y.imagbit)
 

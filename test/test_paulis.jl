@@ -1,4 +1,5 @@
 using Test
+using StabilizerFormalism
 using StabilizerFormalism.Paulis
 
 
@@ -11,8 +12,9 @@ using StabilizerFormalism.Paulis
     @test x == Pauli(lowercase("XIYZXXXIXIIIZZZX"))
 end
 
-@testset "Pauli Operator Algebraic Operations" begin
-    x,y,z = Pauli.([:x,:y,:z])
+x,y,z = Pauli.([:x,:y,:z])
+@testset "Scalar Operations" begin
+    
 
     # scalar multiplication
     imX = (im * x)
@@ -25,7 +27,9 @@ end
     @test y * z == im * Pauli(:x)
     @test z * x == im * Pauli(:y)
 
+end
 
+@testset "Tensor Operation"
     # test tensor product
     @test x ⊗ x == Pauli(:xx)
     @test im*Pauli(:x) ⊗ Pauli(:y) == im * Pauli(:xy)
