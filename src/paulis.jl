@@ -9,7 +9,8 @@ import Base.Iterators.product
 
 using DocStringExtensions
 import LinearAlgebra: mul!, lmul!, rmul!, kron
-using LoopVectorization
+using LoopVectorization: @inbounds
+
 include("paulitable.jl")
 
 #### Common Interface for different Representations #####
@@ -23,9 +24,9 @@ function signbit(p::AbstractPauli) end
 function imagbit(p::AbstractPauli) end
 
 ### Math Operations ####
-function Base.adjoint(p::AbstractPauli) end 
+function Base.adjoint(p::AbstractPauli) end
 function Base.:-(x::AbstractPauli) end
-function Base.:*(p::AbstractPauli, q::AbstractPauli) end 
+function Base.:*(p::AbstractPauli, q::AbstractPauli) end
 function Base.:*(y::AbstractPauli, x::Number) end
 function Base.:*(x::Number, y::AbstractPauli) end
 function abs(p::AbstractPauli) end
@@ -115,7 +116,7 @@ macro p_str(p)
         'i' => [false, false]
     )
     m = BitArray(hcat([conv[lowercase(v)] for v in p]...)')
-    return Pauli(m[:,1], m[:,2])
+    return Pauli(m[:, 1], m[:, 2])
 end
 
 """
@@ -155,7 +156,7 @@ signbit(p::Pauli) = p.signbit
 imagbit(p::Pauli) = p.imagbit
 
 # In-Place Operations
-function mul!(C::Pauli{N}, A::Pauli{N}, B::Pauli{N}) where N 
+function mul!(C::Pauli{N}, A::Pauli{N}, B::Pauli{N}) where {N}
     C.signbit = A.signbit ⊻ B.signbit
     C.imagbit = A.imagbit ⊻ B.imagbit
     @inbounds for x in 1:N
@@ -166,9 +167,9 @@ function mul!(C::Pauli{N}, A::Pauli{N}, B::Pauli{N}) where N
     end
 end
 
-mul!(A::Pauli{N}, B::Pauli{N}) where N = mul!(A, A, B)
+mul!(A::Pauli{N}, B::Pauli{N}) where {N} = mul!(A, A, B)
 
-function Base.:*(p::Pauli{N}, q::Pauli{N}) where N
+function Base.:*(p::Pauli{N}, q::Pauli{N}) where {N}
     o = Pauli{N}(false, false, similar(xbits(p)), similar(zbits(p)))
     mul!(o, p, q)
     o
@@ -242,16 +243,10 @@ Return true if two paulis anticommute
 """
 anticommuting(x::AbstractPauli, y::AbstractPauli) = ~commuting(x, y)
 
-
-
-# commuting(x::AbstractVector{<:Pauli}, y::AbstractVector{<:Pauli}) = [commuting.(i,y) for i in x]
-# anticommuting(x::AbstractVector{<:Pauli}, y::AbstractVector{<:Pauli}) = [anticommuting.(i,y) for i in x]
-
 # setting up iteration interface
 Base.length(x::Pauli) = 1
 Base.iterate(x::Pauli) = (x, nothing)
 Base.iterate(x::Pauli, n::Nothing) = nothing
-
 
 include("representations.jl")
 

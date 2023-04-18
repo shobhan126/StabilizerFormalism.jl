@@ -12,13 +12,13 @@ julia> symplectic(p"IXY")
 julia> length(symplectic(p"IXYZ))
 6
 """
-symplectic(p::Pauli) = vec(p.bits)
+symplectic(p::AbstractPauli) = [xbits(p); zbits]
 
 """
 Given a vector of Pauli Operators with same number of qubits, return a matrix rows corresponding to the 
 symplectic representation of each Pauli{N}.
 """
-checkmatrix(s::Vector{<:Pauli}) = vcat(symplectic.(s)'...)
+checkmatrix(s::Vector{<:AbstractPauli{N}}) where N= vcat(symplectic.(s)'...)
 
 """
     Matrix(x::Pauli)
@@ -48,6 +48,3 @@ function Matrix(p::Pauli, sparse=true)
     mapreduce(f, kron, eachrow(bits(p))) * c
         
 end
-
-
-# Matrix(x::Pauli) = x.coeff * kron(Matrix.(x.val)...)
