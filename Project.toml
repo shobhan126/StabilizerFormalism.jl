@@ -1,7 +1,7 @@
 name = "StabilizerFormalism"
 uuid = "7e638fc7-ba1b-4f85-bfb5-35bfeb24dd6c"
 authors = ["sho <shobhan126@gmail.com"]
-version = "0.1.2"
+version = "0.1.1"
 
 [deps]
 Combinatorics = "861a8166-3701-5b0c-9a16-15d98fcdc6aa"
