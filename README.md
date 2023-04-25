@@ -95,4 +95,48 @@ julia> checkmatrix([s1, s2, s3])
  1  1  0  0  0  0  0  0
 
  # check matrix will discard the the imaginary unit / negative sign
+
+
+
+ # conjugating stabilizers with clifford operations
+julia> stabs = [p"IXYZ", p"IZIZ", p"ZIXY"]
+ 3-element Vector{Pauli{4}}:
+ IXYZ
+ IZIZ
+ ZIXY
+
+# define a stabilizer
+julia> stabsnew = H(1).(stabs)
+3-element Vector{Pauli{4}}:
+ IXYZ
+ IZIZ
+ XIXY
+
+# inplace multiplication will mutate stabs rather than returning a new object 
+julia> H!(1).(stabs)
+3-element Vector{Pauli{4}}:
+ IXYZ
+ IZIZ
+ XIXY
+
+julia> stabs
+3-element Vector{Pauli{4}}:
+ IXYZ
+ IZIZ
+ XIXY
+
+
+julia> CNOT!(1,3).(stabs)
+3-element Vector{Pauli{4}}:
+ ZXYZ
+ IZIZ
+ XIIY
+ 
+
+julia> Z(1).(stabs)
+3-element Vector{Pauli{4}}:
+ IXYZ
+ IZIZ
+ XIXY
+
 ```

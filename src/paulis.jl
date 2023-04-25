@@ -256,4 +256,6 @@ Base.iterate(x::Pauli) = (x, nothing)
 Base.iterate(x::Pauli, n::Nothing) = nothing
 
 include("representations.jl")
+
+export zbits, xbits, bits
 end

@@ -53,7 +53,7 @@ Passing Multiple arguments will be read as concurrent / transveral operation.
 function (g::S!)(p::Pauli)
     # X => Y;  Y => X bitflip on Z
     @inbounds for i ∈ g.qubits
-        zbits(p)[i] ⊻= xbits(p)[i, 1]
+        zbits(p)[i] ⊻= xbits(p)[i]
     end
     p
 end
@@ -70,7 +70,7 @@ Passing Multiple arguments will be read as concurrent / transveral operation.
 function (g::X!)(p::AbstractPauli)
     # Z -> -Z # flips the sign if z bit is present
     @inbounds for i ∈ g.qubits
-        p.signbit ⊻= (zbits(p))
+        p.signbit ⊻= (zbits(p))[i]
     end
     p
 end

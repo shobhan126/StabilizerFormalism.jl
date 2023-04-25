@@ -7,6 +7,7 @@ module StabilizerFormalism
     export AbstractPauli
     export Pauli, PauliTable, @p_str, @pauli, xbits, zbits
     export symplectic, checkmatrix
+    import .Paulis: zbits, xbits
     include("stabilizer_group.jl")
     include("cliffords.jl")
     include("graph_state.jl")

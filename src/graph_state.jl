@@ -1,4 +1,3 @@
-
 using Graphs
 using LoopVectorization: @turbo, @inbounds
 export GraphState, add_edge!, add_vertex!, nv, ne, edges, src, dst
