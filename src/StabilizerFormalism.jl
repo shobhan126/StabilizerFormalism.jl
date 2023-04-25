@@ -13,6 +13,6 @@ module StabilizerFormalism
     using .Cliffords: ⋊, Clifford
     export Cliffords
     
-    # Maybe not pollute the namespace with clifford names
-    # export  CNOT, H, S, X, Y, Z
+    # Maybe not pollute the namespace with clifford names?
+    export  CNOT, H, S, X, Y, Z, CNOT!, H!, S!, Y!, Z!
 end
